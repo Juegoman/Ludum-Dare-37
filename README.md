@@ -9,7 +9,7 @@
 ##How to Run
 Serve the files from your favorite server program.
 
-We use python -m SimpleHTTPServer
+We use `python -m SimpleHTTPServer`
 
 ##Dependencies
 [Phaser](http://phaser.io)
