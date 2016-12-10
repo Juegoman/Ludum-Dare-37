@@ -11,5 +11,7 @@ Serve the files from your favorite server program.
 
 We use `python -m SimpleHTTPServer`
 
+The server should serve index.html and all assets should be accessible.
+
 ##Dependencies
 [Phaser](http://phaser.io)
