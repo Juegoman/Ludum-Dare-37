@@ -199,9 +199,6 @@ window.onload = function() {
         this.enemy.exists = false;
         this.enemy.anchor.set(0.5);
 
-        this.enemy.autoCull = true;
-        this.enemy.outOfCameraBoundsKill = true;
-
         game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
 
     };
@@ -256,6 +253,10 @@ window.onload = function() {
         if (this.AITimer === 0) {
             this.enemy.rotation = game.physics.arcade.angleBetween(this.enemy, this.player);
 
+            if (this.enemy.x > 800 || this.enemy.x < 0 || this.enemy.y > 600 || this.enemy.y < 0) {
+                spawnEnemy(this, this.health);
+            }
+
             this.weapon.fire(this.enemy);
 
             var movRot = this.enemy.rotation;
@@ -301,9 +302,6 @@ window.onload = function() {
         this.enemy.animations.add('walk', [0, 1, 2, 3, 4, 5, 6 ,7], 10, true);
         this.enemy.animations.add('attack', [8, 9, 10, 11], 10, false);
 
-        this.enemy.autoCull = true;
-        this.enemy.outOfCameraBoundsKill = true;
-
         game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
 
     };
@@ -344,6 +342,10 @@ window.onload = function() {
       game.physics.arcade.overlap(this.enemy, this.game.weapons[3], this.game.laserEnemyHandler);
 
       if (this.AITimer === 0) {
+          if (this.enemy.x > 800 || this.enemy.x < 0 || this.enemy.y > 600 || this.enemy.y < 0) {
+              spawnEnemy(this, this.health);
+          }
+
           this.enemy.animations.play('walk');
           this.enemy.rotation = game.physics.arcade.moveToObject(this.enemy, this.player, 50);
           this.AITimer = 15;
@@ -368,9 +370,6 @@ window.onload = function() {
         this.enemy.enemyInfo = this;
         this.enemy.exists = false;
         this.enemy.anchor.set(0.5);
-
-        this.enemy.autoCull = true;
-        this.enemy.outOfCameraBoundsKill = true;
 
         game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
 
@@ -422,6 +421,10 @@ window.onload = function() {
         game.physics.arcade.collide(this.player, this.weapon, this.game.bulletPlayerHandler);
 
         if (this.AITimer === 0) {
+            if (this.enemy.x > 800 || this.enemy.x < 0 || this.enemy.y > 600 || this.enemy.y < 0) {
+                spawnEnemy(this, this.health);
+            }
+
             this.enemy.rotation = game.physics.arcade.angleBetween(this.enemy, this.player);
 
             this.weapon.fire(this.enemy);
@@ -478,9 +481,6 @@ window.onload = function() {
         this.turret = game.add.sprite(-100, -100, 'guardiancannon');
         this.turret.exists = false;
         this.turret.anchor.set(0.5);
-
-        this.turret.autoCull = true;
-        this.turret.outOfCameraBoundsKill = true;
 
         game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
     };
@@ -555,6 +555,10 @@ window.onload = function() {
         this.turret.rotation = game.physics.arcade.angleBetween(this.turret, this.player);
 
         if (this.AITimer === 0) {
+            if (this.enemy.x > 800 || this.enemy.x < 0 || this.enemy.y > 600 || this.enemy.y < 0) {
+                this.spawn();
+            }
+
             this.enemy.rotation = game.physics.arcade.angleBetween(this.enemy, this.player);
             distance = game.physics.arcade.distanceBetween(this.enemy, this.player);
             if (distance < 200) {
