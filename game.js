@@ -939,7 +939,7 @@ window.onload = function() {
 
         this.overheated = false;
 
-        this.available = true;
+        this.available = false;
 
         for (var i = 0; i < 64; i++) {
             this.add(new Bullet(game, 'plaser', this.powerUpgrades[this.upgradeLevels[0]], 1), true);
