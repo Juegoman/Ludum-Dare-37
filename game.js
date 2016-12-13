@@ -6,6 +6,8 @@ window.onload = function() {
 
     var globalEmitter = null;
 
+    var globalAudio = {};
+
     var Weapon = {};
 
     var Enemy = {};
@@ -66,6 +68,8 @@ window.onload = function() {
 
         this.game = game;
         this.wave = 0;
+
+        this.lastDied = null;
         this.shamblers = [];
         var id = 0;
         var i;
@@ -84,10 +88,7 @@ window.onload = function() {
             id += 1;
         }
         this.guardians = [];
-        for (i = 0; i < 3; i++) {
-            this.guardians.push(new Enemy.Guardian(game, this, id));
-            id += 1;
-        }
+        this.guardians.push(new Enemy.Guardian(game, this, id));
         this.activeEnemies = [];
         this.player = game.player;
 
@@ -127,26 +128,23 @@ window.onload = function() {
 
     };
 
-    // Enemy.Controller.prototype.cleanUpEnemy = function (enemy) {
-    //     console.log(enemy.type + ' died!');
-    //     console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
-    //     this.activeEnemies.splice(this.activeEnemies.indexOf(enemy), 1);
-    //     enemy.enemy.exists = false;
-    //     if (enemy.type === 0) this.shamblers.push(enemy);
-    //     else if (enemy.type === 1) this.hoverers.push(enemy);
-    //     else if (enemy.type === 2) this.drifters.push(enemy);
-    //     else this.guardians.push(enemy);
-    //     console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
-    // };
-
     Enemy.Controller.prototype.cleanUpHoverer = function (e) {
         console.log('Hoverer died!');
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
         var toMove = this.activeEnemies.findIndex(function (element) { return element.id === e.id; });
-        console.log(e.id, this.activeEnemies[toMove].id);
-        this.activeEnemies.splice(toMove, 1);
-        e.enemy.exists = false;
-        this.hoverers.push(e);
+        if (this.activeEnemies[toMove]) {
+            console.log(e.id, this.activeEnemies[toMove].id);
+            this.activeEnemies.splice(toMove, 1);
+            e.enemy.exists = false;
+            this.hoverers.push(e);
+            this.lastDied = e;
+        } else {
+            if (e.id === this.lastDied.id) {
+                console.log(e.id + " already died!");
+                return;
+            }
+            console.log('some kind of strange error with ' + e.id);
+        }
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
     };
 
@@ -154,10 +152,19 @@ window.onload = function() {
         console.log('Shambler died!');
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
         var toMove = this.activeEnemies.findIndex(function (element) { return element.id === e.id; });
-        console.log(e.id, this.activeEnemies[toMove].id);
-        this.activeEnemies.splice(toMove, 1);
-        e.enemy.exists = false;
-        this.shamblers.push(e);
+        if (this.activeEnemies[toMove]) {
+            console.log(e.id, this.activeEnemies[toMove].id);
+            this.activeEnemies.splice(toMove, 1);
+            e.enemy.exists = false;
+            this.shamblers.push(e);
+            this.lastDied = e;
+        } else {
+            if (e.id === this.lastDied.id) {
+                console.log(e.id + " already died!");
+                return;
+            }
+            console.log('some kind of strange error with ' + e.id);
+        }
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
     };
 
@@ -165,10 +172,19 @@ window.onload = function() {
         console.log('Drifter died!');
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
         var toMove = this.activeEnemies.findIndex(function (element) { return element.id === e.id; });
-        console.log(e.id, this.activeEnemies[toMove].id);
-        this.activeEnemies.splice(toMove, 1);
-        e.enemy.exists = false;
-        this.drifters.push(e);
+        if (this.activeEnemies[toMove]) {
+            console.log(e.id, this.activeEnemies[toMove].id);
+            this.activeEnemies.splice(toMove, 1);
+            e.enemy.exists = false;
+            this.drifters.push(e);
+            this.lastDied = e;
+        } else {
+            if (e.id === this.lastDied.id) {
+                console.log(e.id + " already died!");
+                return;
+            }
+            console.log('some kind of strange error with ' + e.id);
+        }
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
     };
 
@@ -176,10 +192,19 @@ window.onload = function() {
         console.log('Guardian died!');
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
         var toMove = this.activeEnemies.findIndex(function (element) { return element.id === e.id; });
-        console.log(e.id, this.activeEnemies[toMove].id);
-        this.activeEnemies.splice(toMove, 1);
-        e.enemy.exists = false;
-        this.guardians.push(e);
+        if (this.activeEnemies[toMove]) {
+            console.log(e.id, this.activeEnemies[toMove].id);
+            this.activeEnemies.splice(toMove, 1);
+            e.enemy.exists = false;
+            this.guardians.push(e);
+            this.lastDied = e;
+        } else {
+            if (e.id === this.lastDied.id) {
+                console.log(e.id + " already died!");
+                return;
+            }
+            console.log('some kind of strange error with ' + e.id);
+        }
         console.log(this.shamblers.length, this.hoverers.length, this.drifters.length, this.guardians.length, this.activeEnemies.length);
     };
 
@@ -205,7 +230,7 @@ window.onload = function() {
 
     Enemy.Hoverer.prototype.spawn = function () {
 
-        spawnEnemy(this, 3);
+        spawnEnemy(this, 3 + Math.floor(this.controller.wave / 5) * 1);
 
     };
 
@@ -215,10 +240,15 @@ window.onload = function() {
         if (this.health <= 0) {
             this.enemy.kill();
 
+            globalEmitter.emitX = this.enemy.x;
+            globalEmitter.emitY = this.enemy.y;
+            globalAudio.explosion.play();
+            globalEmitter.explode(1000, 50);
+
             var roll = Math.floor(Math.random() * 100) + 1;
-            if (roll >= 70) {
+            if (roll >= 80) {
                 roll = Math.floor(Math.random() * 100) + 1;
-                if (roll <= 35) {
+                if (roll <= 15) {
                     this.game.powerups.addPowerup('health', 0, this.enemy.x, this.enemy.y);
                 } else if (roll <= 70) {
                     this.game.powerups.addPowerup('shield', 1, this.enemy.x, this.enemy.y);
@@ -308,7 +338,7 @@ window.onload = function() {
 
     Enemy.Shambler.prototype.spawn = function () {
 
-        spawnEnemy(this, 5);
+        spawnEnemy(this, 5 + Math.floor(this.controller.wave / 5) * 2);
 
     };
 
@@ -317,10 +347,16 @@ window.onload = function() {
 
         if (this.health <= 0) {
             this.enemy.kill();
+
+            globalEmitter.emitX = this.enemy.x;
+            globalEmitter.emitY = this.enemy.y;
+            globalAudio.explosion.play();
+            globalEmitter.explode(1000, 100);
+
             var roll = Math.floor(Math.random() * 100) + 1;
-            if (roll >= 80) {
+            if (roll >= 90) {
                 roll = Math.floor(Math.random() * 100) + 1;
-                if (roll <= 50) this.game.powerups.addPowerup('health', 0, this.enemy.x, this.enemy.y);
+                if (roll <= 20) this.game.powerups.addPowerup('health', 0, this.enemy.x, this.enemy.y);
                 else this.game.powerups.addPowerup('shield', 1, this.enemy.x, this.enemy.y);
             }
 
@@ -347,7 +383,9 @@ window.onload = function() {
           }
 
           this.enemy.animations.play('walk');
-          this.enemy.rotation = game.physics.arcade.moveToObject(this.enemy, this.player, 50);
+          var speed = 50 + Math.floor(this.controller.wave / 10) * 10;
+          if (90 < speed) speed = 90;
+          this.enemy.rotation = game.physics.arcade.moveToObject(this.enemy, this.player, speed);
           this.AITimer = 15;
       } else {
         this.AITimer -= 1;
@@ -377,7 +415,7 @@ window.onload = function() {
 
     Enemy.Drifter.prototype.spawn = function () {
 
-        spawnEnemy(this, 7);
+        spawnEnemy(this, 7 + Math.floor(this.controller.wave / 5) * 3);
 
     };
 
@@ -386,10 +424,16 @@ window.onload = function() {
 
         if (this.health <= 0) {
             this.enemy.kill();
+
+            globalEmitter.emitX = this.enemy.x;
+            globalEmitter.emitY = this.enemy.y;
+            globalAudio.explosion.play();
+            globalEmitter.explode(1000, 100);
+
             var roll = Math.floor(Math.random() * 100) + 1;
             if (roll >= 50) {
                 roll = Math.floor(Math.random() * 100) + 1;
-                if (roll <= 20) {
+                if (roll <= 10) {
                     this.game.powerups.addPowerup('health', 0, this.enemy.x, this.enemy.y);
                 } else if (roll <= 40) {
                     this.game.powerups.addPowerup('shield', 1, this.enemy.x, this.enemy.y);
@@ -473,9 +517,6 @@ window.onload = function() {
         this.enemy.exists = false;
         this.enemy.anchor.set(0.5);
 
-        this.enemy.autoCull = true;
-        this.enemy.outOfCameraBoundsKill = true;
-
         this.enemy.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 
         this.turret = game.add.sprite(-100, -100, 'guardiancannon');
@@ -486,7 +527,7 @@ window.onload = function() {
     };
 
     Enemy.Guardian.prototype.spawn = function () {
-        spawnEnemy(this, 20);
+        spawnEnemy(this, 20 + this.controller.wave * 2);
 
         this.turret.alive = true;
         this.turret.exists = true;
@@ -503,6 +544,12 @@ window.onload = function() {
         if (this.health <= 0) {
             this.turret.kill();
             this.enemy.kill();
+
+            globalEmitter.emitX = this.enemy.x;
+            globalEmitter.emitY = this.enemy.y;
+            globalAudio.explosion.play();
+            globalEmitter.explode(1000, 100);
+
             weaponpool = [];
             for (var i = 1; i < 5 ; i++) {
                 if (!this.game.weapons[i].available) weaponpool.push(i);
@@ -515,7 +562,7 @@ window.onload = function() {
                 }
             } else {
                 roll = Math.floor(Math.random() * 100) + 1;
-                if (roll <= 5) {
+                if (roll <= 2) {
                     this.game.powerups.addPowerup('health', 0, this.enemy.x, this.enemy.y);
                 } else if (roll <= 10) {
                     this.game.powerups.addPowerup('shield', 1, this.enemy.x, this.enemy.y);
@@ -719,6 +766,8 @@ window.onload = function() {
       for (var i = 0; i <= this.upgradeLevels[2]; i++) {
           var rotationMod = (Math.random() * (Math.PI / 36)) - (Math.PI / 72);
 
+          globalAudio.shoot.play();
+
           this.getFirstExists(false).fire(x, y, source.rotation + rotationMod, this.bulletSpeed);
       }
 
@@ -797,6 +846,8 @@ window.onload = function() {
 
         for (var i = 0; i <= this.upgradeLevels[2]; i++) {
             var rotationMod = (Math.random() * (Math.PI / 18)) - (Math.PI / 36);
+
+            globalAudio.shoot.play();
 
             this.getFirstExists(false).fire(x, y, source.rotation + rotationMod, this.bulletSpeed);
         }
@@ -877,6 +928,8 @@ window.onload = function() {
         for (var i = 0; i <= this.upgradeLevels[2]; i++) {
             var rotationMod = (Math.random() * (Math.PI / 18)) - (Math.PI / 36);
 
+            globalAudio.shoot.play();
+
             this.getFirstExists(false).fire(x, y, source.rotation + rotationMod, this.bulletSpeed, true);
         }
 
@@ -922,11 +975,11 @@ window.onload = function() {
         this.upgradeLevels = [0, 0, 0];
         this.powerUpgrades = [0.25, 0.5, 0.75, 1, 1.25];
         this.speedUpgrades = [
-                                {heatLimit: 100, diss: 1},
-                                {heatLimit: 200, diss: 1.5},
+                                {heatLimit: 150, diss: 1},
+                                {heatLimit: 250, diss: 2},
                                 {heatLimit: 500, diss: 10},
                                 {heatLimit: 1000, diss: 25},
-                                {heatLimit: 2000, diss: 100}
+                                {heatLimit: 2000, diss: 90}
                              ];
 
         this.nextFire = 0;
@@ -959,9 +1012,11 @@ window.onload = function() {
         var x = source.x + offset.x;
         var y = source.y + offset.y;
 
+        globalAudio.shoot.play();
+
         this.getFirstExists(false).fire(x, y, source.rotation, this.bulletSpeed, true);
 
-        this.heat += 1 + this.upgradeLevels[2];
+        this.heat += 1 + this.upgradeLevels[2] * this.powerUpgrades[this.upgradeLevels[0]];
 
         this.nextFire = this.game.time.time + this.fireRate;
     };
@@ -1048,6 +1103,8 @@ window.onload = function() {
         var offset = this.game.physics.arcade.velocityFromRotation(source.rotation - 0.67474429, 19.2);
         var x = source.x + offset.x;
         var y = source.y + offset.y;
+
+        globalAudio.shoot.play();
 
         if (this.upgradeLevels[2] === 0) {
             this.getFirstExists(false).fire(x, y, source.rotation, this.bulletSpeed);
@@ -1222,10 +1279,12 @@ window.onload = function() {
 
         this.nextFire = this.game.game.time + 1000;
         this.bulletSpeed = 50;
-        this.fireRate = [3000, 100, 100];
+        this.fireRate = [3000, 100];
         this.currentFireStep = 0;
+        this.volleyMax = 3;
+        this.volley = 0;
 
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 64; i++) {
             this.add(new Missile(game, 'emissile', 3), true);
         }
 
@@ -1239,6 +1298,8 @@ window.onload = function() {
 
         if (this.game.time.time < this.nextFire) {return;}
 
+        this.volleyMax = 2 + Math.floor(source.enemyInfo.controller.wave / 10);
+
         var offset = this.game.physics.arcade.velocityFromRotation(source.rotation - 1.1070623, 17.9);
         var x = source.x + offset.x;
         var y = source.y + offset.y;
@@ -1247,21 +1308,35 @@ window.onload = function() {
 
         this.getFirstExists(false).fire(x, y, source.rotation + rotationMod, this.bulletSpeed, true);
 
-        this.currentFireStep += 1;
-        if (this.currentFireStep === this.fireRate.length) this.currentFireStep = 0;
-
+        if (this.currentFireStep === 0) {
+            this.currentFireStep = 1;
+            this.volley = 0;
+        } else {
+            if (this.volley < this.volleyMax) {
+                this.volley += 1;
+            } else {
+                this.currentFireStep = 0;
+            }
+        }
         this.nextFire = this.game.time.time + this.fireRate[this.currentFireStep];
     };
 
     Weapon.GuardianMissile.prototype.reset = function() {
         this.nextFire = this.game.time.time + 1000;
         this.currentFireStep = 0;
+        this.volleyMax = 3;
+        this.volley = 0;
     };
 
     var PowerupManager = function(game) {
         Phaser.Group.call(this, game, game.world, 'Powerups', false, true, Phaser.Physics.ARCADE);
 
         this.game = game;
+
+
+        this.powerupsLeft = [10, 10, 20, 20, 15, 1, 1, 1, 1];
+
+
 
 
 
@@ -1272,7 +1347,10 @@ window.onload = function() {
     PowerupManager.prototype.constructor = PowerupManager;
 
     PowerupManager.prototype.addPowerup = function(key, type, x, y) {
-        this.add(new Powerup(this.game, key, type)).reset(x, y);
+        if (this.powerupsLeft[type] > 0) {
+            this.powerupsLeft[type] -= 1;
+            this.add(new Powerup(this.game, key, type)).reset(x, y);
+        }
     };
 
     PowerupManager.prototype.update = function() {
@@ -1316,6 +1394,7 @@ window.onload = function() {
 
         this.background = null;
         this.foreground = null;
+        this.BGM = null;
 
         this.player = null;
         this.enemies = null;
@@ -1324,6 +1403,8 @@ window.onload = function() {
         this.hpDisplay = null;
         this.weaponDisplay = null;
         this.shieldDisplay = null;
+        this.waveDisplay = null;
+        this.gameOverDisplay = null;
 
         this.emitter = null;
 
@@ -1334,6 +1415,8 @@ window.onload = function() {
         this.weaponName = null;
 
         this.powerups = null;
+
+        this.gameStarted = false;
 
     };
 
@@ -1347,6 +1430,7 @@ window.onload = function() {
 
         preload: function () {
 
+            this.load.image('title', 'SRTitlescreen.png');
             this.load.spritesheet('character', 'SRCharacterAnimation.png', 30, 30);
             this.load.image('hoverer', 'SRHoverer.png');
             this.load.spritesheet('shambler', 'SRShamblerAnimation.png', 40, 40);
@@ -1376,6 +1460,12 @@ window.onload = function() {
             this.load.image('power', 'SRShotUp.png');
             this.load.image('speed', 'SRSpeedUp.png');
             this.load.image('shot', 'SRDualShot.png');
+            this.load.audio('bgm', 'song.ogg');
+            this.load.audio('phit', 'PlayerHitEffect.wav');
+            this.load.audio('powerupget', 'PowUpEffect.wav');
+            this.load.audio('shoot', 'ShootEffect.wav');
+            this.load.audio('ehit', 'EnemyHitEffect.wav');
+            this.load.audio('explosion', 'ExplodeEffect.wav');
             //this.load.image('cannon', 'SRCannon.png');
             //this.load.image('missile', 'SRMissile.png');
             //this.load.image('laser', 'SRLaser.png');
@@ -1385,12 +1475,22 @@ window.onload = function() {
 
         create: function () {
 
+            this.BGM = game.add.audio('bgm', 1, true);
+
+            this.BGM.play();
+
+            globalAudio.phit = game.add.audio('phit');
+            globalAudio.ehit = game.add.audio('ehit');
+            globalAudio.powerup = game.add.audio('powerupget');
+            globalAudio.shoot = game.add.audio('shoot');
+            globalAudio.explosion = game.add.audio('explosion');
+
             this.walls = game.add.group();
 
             this.walls.enableBody = true;
 
-            var bg = this.add.image(0, 0, 'bg');
-            bg.sendToBack();
+            this.background = this.add.image(0, 0, 'bg');
+            this.background.sendToBack();
             //corners
             var cornerTile = this.walls.create(0, 0, 'Cwall');
             cornerTile.body.immovable = true;
@@ -1446,6 +1546,7 @@ window.onload = function() {
             this.player.shield = 0;
 
             this.player.hurt = function (damage) {
+                globalAudio.phit.play();
                 if (this.shield > 0) {
                     this.shield -= damage;
                     if (this.shield < 0) {
@@ -1455,6 +1556,10 @@ window.onload = function() {
                 } else this.health -= damage;
 
                 if (this.health < 1) {
+                    globalEmitter.emitX = this.x;
+                    globalEmitter.emitY = this.y;
+                    globalAudio.explosion.play();
+                    globalEmitter.explode(2000, 200);
                     this.kill();
                     return false;
                 } else return true;
@@ -1465,10 +1570,12 @@ window.onload = function() {
                     case 0:
                         if (this.player.health < 10) {
                             this.player.health += 1;
+                            this.powerups.powerupsLeft[0] += 1;
                             return true;
                         } else return false;
                     case 1:
                         this.player.shield += 1;
+                        this.powerups.powerupsLeft[1] += 1;
                         return true;
                     case 2:
                         //power
@@ -1503,11 +1610,15 @@ window.onload = function() {
                 }
             }.bind(this);
 
-            this.hpDisplay = this.add.text(10, 565, 'PLAYER HEALTH: **********');
-            this.shieldDisplay = this.add.text(400, 565, 'SHIELDS: 0');
-            this.weaponDisplay = this.add.text(10, 10, 'BULLET');
+            this.hpDisplay = this.add.text(10, 565, 'PLAYER HEALTH: **********', {'fill': 'white'});
+            this.shieldDisplay = this.add.text(400, 565, 'SHIELDS: 0', {'fill': 'white'});
+            this.weaponDisplay = this.add.text(10, 5, 'BULLET', {'fill': 'white'});
+            this.waveDisplay = this.add.text(650, 565, 'WAVE ', {'fill': 'white'});
+            this.gameOverDisplay = this.add.text(265, 280, '', {'fill': 'white', 'font': 'bold 32pt Arial'});
 
             this.enemies = new Enemy.Controller(this);
+
+            this.player.enemyControllerReference = this.enemies;
 
             globalEmitter = game.add.emitter(-100, -100, 600);
 
@@ -1519,6 +1630,8 @@ window.onload = function() {
             this.cursors = this.input.keyboard.createCursorKeys();
             this.cursors.ctrl = this.input.keyboard.addKey(Phaser.KeyCode.CONTROL);
             this.cursors.c = this.input.keyboard.addKey(Phaser.KeyCode.C);
+            this.cursors.m = this.input.keyboard.addKey(Phaser.KeyCode.M);
+            this.cursors.enter = this.input.keyboard.addKey(Phaser.KeyCode.ENTER);
             this.cursors.pointer = this.input.activePointer;
 
             this.cursors.ctrl.onDown.add(function() {
@@ -1534,91 +1647,110 @@ window.onload = function() {
                 console.dir(this.enemies, this);
             }.bind(this));
 
+            this.cursors.m.onDown.add(function() {
+                if (this.BGM.isPlaying) this.BGM.stop();
+                else this.BGM.play();
+            }.bind(this));
+
             this.powerups = new PowerupManager(this);
+
+            this.foreground = this.add.image(0, 0, 'title');
+            this.foreground.bringToTop();
+
+            this.cursors.enter.onDown.add(function() {
+                this.foreground.kill();
+                this.gameStarted = true;
+            }.bind(this));
         },
 
         update: function () {
 
-            //collision
-            var touchWall = this.physics.arcade.collide(this.player, this.walls);
-            for (var i = 0; i < this.weapons.length; i++) {
-                game.physics.arcade.collide(this.weapons[i], this.walls, this.bulletWallHandler);
-            }
-
-            //health display
-            var hpText = 'PLAYER HEALTH: ';
-            for (var i = 0; i < this.player.health; i++) {
-              hpText = hpText + '*';
-            }
-            this.hpDisplay.setText(hpText);
-
-            //shield display
-            this.shieldDisplay.setText('SHIELDS: ' + this.player.shield);
-
-            //weapon display
-            var weaponText = "";
-            var upgradeLevels = this.weapons[this.currentWeapon].upgradeLevels;
-            switch (this.currentWeapon) {
-                case 0:
-                    weaponText += 'BULLET';
-                    break;
-                case 1:
-                    weaponText += 'CANNON';
-                    break;
-                case 2:
-                    weaponText += 'ROCKET';
-                    break;
-                case 3:
-                    weaponText += 'LASER';
-                    break;
-                case 4:
-                    weaponText += 'WAVE';
-                    break;
-            }
-            weaponText += ' POW' + upgradeLevels[0] + ' SPD' + upgradeLevels[1] + ' SHOT' + (upgradeLevels[2]);
-
-            if (this.currentWeapon === 3) {
-                weaponText += ' HEAT ' + Math.round((this.weapons[3].heat / this.weapons[3].heatLimit) * 100) + '%';
-                if (this.weapons[3].overheated) weaponText += ' OVERHEATED';
-            }
-
-            this.weaponDisplay.setText(weaponText);
-
-            //control
-            this.player.body.velocity.set(0);
-            if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
-                if (this.cursors.left.isDown) {
-                    this.player.body.velocity.x = -100;
-                } else if (this.cursors.right.isDown) {
-                    this.player.body.velocity.x = 100;
+            if (this.gameStarted) {
+                //collision
+                var touchWall = this.physics.arcade.collide(this.player, this.walls);
+                for (var i = 0; i < this.weapons.length; i++) {
+                    game.physics.arcade.collide(this.weapons[i], this.walls, this.bulletWallHandler);
                 }
-                if (this.cursors.up.isDown) {
-                    this.player.body.velocity.y = -100;
-                } else if (this.cursors.down.isDown) {
-                    this.player.body.velocity.y = 100;
+
+                //health display
+                var hpText = 'PLAYER HEALTH: ';
+                for (var i = 0; i < this.player.health; i++) {
+                  hpText = hpText + '*';
                 }
-                this.player.animations.play('walk');
-            } else {
-                this.player.animations.stop();
-                this.player.frame = 0;
+                this.hpDisplay.setText(hpText);
+
+                //shield display
+                this.shieldDisplay.setText('SHIELDS: ' + this.player.shield);
+
+                //weapon display
+                var weaponText = "";
+                var upgradeLevels = this.weapons[this.currentWeapon].upgradeLevels;
+                switch (this.currentWeapon) {
+                    case 0:
+                        weaponText += 'BULLET';
+                        break;
+                    case 1:
+                        weaponText += 'CANNON';
+                        break;
+                    case 2:
+                        weaponText += 'ROCKET';
+                        break;
+                    case 3:
+                        weaponText += 'LASER';
+                        break;
+                    case 4:
+                        weaponText += 'WAVE';
+                        break;
+                }
+                weaponText += ' POW' + upgradeLevels[0] + ' SPD' + upgradeLevels[1] + ' SHOT' + (upgradeLevels[2]);
+
+                if (this.currentWeapon === 3) {
+                    weaponText += ' HEAT ' + Math.round((this.weapons[3].heat / this.weapons[3].heatLimit) * 100) + '%';
+                    if (this.weapons[3].overheated) weaponText += ' OVERHEATED';
+                }
+
+                this.weaponDisplay.setText(weaponText);
+
+                //wave display
+                this.waveDisplay.setText('WAVE ' + this.enemies.wave);
+
+                if (this.player.health < 1) this.gameOverDisplay.setText('GAME OVER');
+
+                //control
+                this.player.body.velocity.set(0);
+                if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
+                    if (this.cursors.left.isDown) {
+                        this.player.body.velocity.x = -100;
+                    } else if (this.cursors.right.isDown) {
+                        this.player.body.velocity.x = 100;
+                    }
+                    if (this.cursors.up.isDown) {
+                        this.player.body.velocity.y = -100;
+                    } else if (this.cursors.down.isDown) {
+                        this.player.body.velocity.y = 100;
+                    }
+                    this.player.animations.play('walk');
+                } else {
+                    this.player.animations.stop();
+                    this.player.frame = 0;
+                }
+
+                if (this.cursors.pointer.isDown && this.player.alive) {
+                    this.weapons[this.currentWeapon].fire(this.player);
+                }
+
+                //rotation
+                this.player.rotation = this.physics.arcade.angleToPointer(this.player);
+
+                //enemies
+                this.enemies.update();
+
+                //powerups
+                this.powerups.update();
+
+                //laser heat
+                if (this.weapons[3].available) this.weapons[3].update();
             }
-
-            if (this.cursors.pointer.isDown && this.player.alive) {
-                this.weapons[this.currentWeapon].fire(this.player);
-            }
-
-            //rotation
-            this.player.rotation = this.physics.arcade.angleToPointer(this.player);
-
-            //enemies
-            this.enemies.update();
-
-            //powerups
-            this.powerups.update();
-
-            //laser heat
-            if (this.weapons[3].available) this.weapons[3].update();
-
         },
 
         onEnemyCollide: function (player, enemy) {
@@ -1647,12 +1779,14 @@ window.onload = function() {
                 });
                 globalEmitter.emitX = bullet.x;
                 globalEmitter.emitY = bullet.y;
+                globalAudio.explosion.play();
                 globalEmitter.explode(1000, 50);
             }
 
         },
 
         bulletEnemyHandler: function (enemy, bullet) {
+            globalAudio.ehit.play();
 
             bullet.kill();
             if (bullet.emitter) {
@@ -1662,6 +1796,7 @@ window.onload = function() {
                 });
                 globalEmitter.emitX = bullet.x;
                 globalEmitter.emitY = bullet.y;
+                globalAudio.explosion.play();
                 globalEmitter.explode(1000, 50);
             }
             if (!enemy.enemyInfo.damage(bullet.damageVal)) {
@@ -1677,6 +1812,7 @@ window.onload = function() {
         },
 
         laserEnemyHandler: function (enemy, laser) {
+            globalAudio.ehit.play();
             laser.kill();
             enemy.enemyInfo.damage(laser.damageVal);
         },
@@ -1691,10 +1827,11 @@ window.onload = function() {
                 });
                 globalEmitter.emitX = bullet.x;
                 globalEmitter.emitY = bullet.y;
+                globalAudio.explosion.play();
                 globalEmitter.explode(1000, 50);
             }
 
-            if (player.hurt(bullet.damageVal)) {
+            if (player.hurt(Math.floor(bullet.damageVal * 1 + (Math.floor(player.enemyControllerReference.wave / 5) / 10)))) {
                 var bump = game.physics.arcade.velocityFromRotation(bullet.rotation, 10);
 
                 if (player.x + bump.x > 50 && player.x + bump.x < game.world.width - 50) player.x += bump.x;
@@ -1703,7 +1840,10 @@ window.onload = function() {
         },
 
         powerupHandler: function (powerup, player) {
-            if (player.applyPowerUp(powerup.ptype)) powerup.destroy();
+            if (player.applyPowerUp(powerup.ptype)) {
+                globalAudio.powerup.play();
+                powerup.destroy();
+            }
         }
 
     };
