@@ -895,11 +895,11 @@ window.onload = function() {
         this.upgradeLevels = [0, 0, 0];
         this.powerUpgrades = [3, 4, 5, 6, 7];
         this.speedUpgrades = [
-                                {speed: 40, rate: 800},
-                                {speed: 75, rate: 650},
-                                {speed: 100, rate: 550},
-                                {speed: 150, rate: 450},
-                                {speed: 200, rate: 300}
+                                {speed: 50, rate: 800},
+                                {speed: 75, rate: 700},
+                                {speed: 100, rate: 600},
+                                {speed: 200, rate: 500},
+                                {speed: 300, rate: 400}
                              ];
 
         this.nextFire = 0;
@@ -908,7 +908,7 @@ window.onload = function() {
 
         this.available = false;
 
-        for (var i = 0; i < 64; i++) {
+        for (var i = 0; i < 100; i++) {
             this.add(new Missile(game, 'pmissile', this.powerUpgrades[this.upgradeLevels[0]]), true);
         }
 
@@ -975,11 +975,11 @@ window.onload = function() {
         this.upgradeLevels = [0, 0, 0];
         this.powerUpgrades = [0.25, 0.5, 0.75, 1, 1.25];
         this.speedUpgrades = [
-                                {heatLimit: 150, diss: 1},
-                                {heatLimit: 250, diss: 2},
-                                {heatLimit: 500, diss: 10},
-                                {heatLimit: 1000, diss: 25},
-                                {heatLimit: 2000, diss: 90}
+                                {heatLimit: 200, diss: 1},
+                                {heatLimit: 300, diss: 2},
+                                {heatLimit: 600, diss: 10},
+                                {heatLimit: 1000, diss: 30},
+                                {heatLimit: 1500, diss: 70}
                              ];
 
         this.nextFire = 0;
@@ -988,7 +988,7 @@ window.onload = function() {
 
         this.heat = 0;
         this.heatLimit = this.speedUpgrades[this.upgradeLevels[1]].heatLimit;
-        this.heatTick = 45;
+        this.heatTick = 20;
 
         this.overheated = false;
 
@@ -1016,7 +1016,7 @@ window.onload = function() {
 
         this.getFirstExists(false).fire(x, y, source.rotation, this.bulletSpeed, true);
 
-        this.heat += 1 + this.upgradeLevels[2] * this.powerUpgrades[this.upgradeLevels[0]];
+        this.heat += 1 + this.upgradeLevels[2] * 0.75 + this.powerUpgrades[this.upgradeLevels[0]];
 
         this.nextFire = this.game.time.time + this.fireRate;
     };
@@ -1628,20 +1628,29 @@ window.onload = function() {
             globalEmitter.gravity = 0;
 
             this.cursors = this.input.keyboard.createCursorKeys();
+            this.cursors.w = this.input.keyboard.addKey(Phaser.KeyCode.W);
+            this.cursors.a = this.input.keyboard.addKey(Phaser.KeyCode.A);
+            this.cursors.s = this.input.keyboard.addKey(Phaser.KeyCode.S);
+            this.cursors.d = this.input.keyboard.addKey(Phaser.KeyCode.D);
+            this.cursors.q = this.input.keyboard.addKey(Phaser.KeyCode.Q);
             this.cursors.ctrl = this.input.keyboard.addKey(Phaser.KeyCode.CONTROL);
             this.cursors.c = this.input.keyboard.addKey(Phaser.KeyCode.C);
             this.cursors.m = this.input.keyboard.addKey(Phaser.KeyCode.M);
             this.cursors.enter = this.input.keyboard.addKey(Phaser.KeyCode.ENTER);
             this.cursors.pointer = this.input.activePointer;
-
-            this.cursors.ctrl.onDown.add(function() {
+            
+            var switchWeaponHandler = function() {
                 weaponFound = false;
                 while (!weaponFound) {
                     this.currentWeapon += 1;
                     if (this.currentWeapon === this.weapons.length) this.currentWeapon = 0;
                     if (this.weapons[this.currentWeapon].available) weaponFound = true;
                 }
-            }.bind(this));
+            };
+
+            this.cursors.ctrl.onDown.add(switchWeaponHandler().bind(this));
+            
+            this.cursors.q.onDown.add(switchWeaponHandler().bind(this));
 
             this.cursors.c.onDown.add(function() {
                 console.dir(this.enemies, this);
@@ -1718,15 +1727,15 @@ window.onload = function() {
 
                 //control
                 this.player.body.velocity.set(0);
-                if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown) {
-                    if (this.cursors.left.isDown) {
+                if (this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown || this.cursors.w.isDown || this.cursors.a.isDown || this.cursors.s.isDown || this.cursors.d.isDown) {
+                    if (this.cursors.left.isDown || this.cursors.a.isDown) {
                         this.player.body.velocity.x = -100;
-                    } else if (this.cursors.right.isDown) {
+                    } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
                         this.player.body.velocity.x = 100;
                     }
-                    if (this.cursors.up.isDown) {
+                    if (this.cursors.up.isDown || this.cursors.w.isDown) {
                         this.player.body.velocity.y = -100;
-                    } else if (this.cursors.down.isDown) {
+                    } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
                         this.player.body.velocity.y = 100;
                     }
                     this.player.animations.play('walk');
